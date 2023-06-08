@@ -1,2 +1,2 @@
-# zigal0_sport_bot
+# sport_bot
 Sport telegram bot for tracking physical activity.
