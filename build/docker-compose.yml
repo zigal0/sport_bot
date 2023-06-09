@@ -5,8 +5,8 @@ services:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_DB: sport_bot
-      POSTGRES_USER: zigal0
+      POSTGRES_DB: sport-bot
+      POSTGRES_USER: sport-bot-user
       POSTGRES_PASSWORD: 1234
     ports:
       - "6432:5432"

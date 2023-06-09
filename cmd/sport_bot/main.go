@@ -5,6 +5,8 @@ import (
 	"os"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/zigal0/sport_bot/internal/app/commands"
 	"github.com/zigal0/sport_bot/internal/repository/users"
@@ -13,6 +15,7 @@ import (
 const (
 	botTokenKey = "BOT_TOKEN"
 	pathToENV   = "env/.env"
+	pgDSNKey    = "PG_DSN"
 )
 
 func main() {
@@ -21,9 +24,19 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	pgDSN, found := os.LookupEnv(pgDSNKey)
+	if !found {
+		log.Panic("Environment variable PG_DSN not found in .env")
+	}
+
+	db, err := sqlx.Connect("pgx", pgDSN)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
 	token, found := os.LookupEnv(botTokenKey)
 	if !found {
-		log.Panic("Environment variable TOKEN not found in .env")
+		log.Panic("Environment variable BOT_TOKEN not found in .env")
 	}
 
 	bot, err := tgbotapi.NewBotAPI(token)
@@ -42,7 +55,7 @@ func main() {
 
 	updates := bot.GetUpdatesChan(updateCfg)
 
-	sportRepo := users.NewUsersRepo()
+	sportRepo := users.NewUsersRepo(db)
 
 	commandSvc := commands.NewCommandService(bot, sportRepo)
 

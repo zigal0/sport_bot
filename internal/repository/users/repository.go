@@ -1,15 +1,29 @@
 package users
 
 import (
-	"github.com/zigal0/sport_bot/internal/model"
+	"github.com/jmoiron/sqlx"
+	"github.com/zigal0/sport_bot/internal/domain"
+	"github.com/pkg/errors"
 )
 
-type usersRepo struct{}
-
-func NewUsersRepo() UsersRepo {
-	return &usersRepo{}
+type usersRepo struct {
+	db *sqlx.DB
 }
 
-func (r *usersRepo) AddUser(user model.User) error {
+func NewUsersRepo(db *sqlx.DB) UsersRepo {
+	return &usersRepo{
+		db: db,
+	}
+}
+
+func (r *usersRepo) AddUser(user domain.User) error {
+	
+	dbUser := DBUserFromDomain(user)
+
+	_, err := r.db.NamedExec(QueryInsertUser, dbUser)
+	if err != nil {
+		return errors.Wrap(err, "usersRepo.AddUser")
+	}
+
 	return nil
 }
