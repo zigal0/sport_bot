@@ -17,15 +17,15 @@ func (svc *CommandService) StartTrack(inputMessage *tgbotapi.Message) {
 		Username: inputMessage.From.UserName,
 	}
 	
-	err := svc.usersRepo.AddUser(user)
+	err := svc.commandProcessor.AddUser(user)
 	if err != nil {
-		log.Print("CommandService.StartTrack: error add user to db")
+		log.Printf("CommandService.StartTrack: error add user to db: %v", err)
 	}
 
 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, StartTrackSuccessMsg)
 
 	_, err = svc.bot.Send(msg)
 	if err != nil {
-		log.Printf("CommandService.Help: error sending reply message to chat - %v", err)
+		log.Printf("CommandService.StartTrack: error sending reply message to chat: %v", err)
 	}
 }

@@ -1,6 +1,7 @@
 CREATE TABLE users (
-    id          BIGINT  PRIMARY KEY,
-    username    TEXT    NOT NULL
+    id          BIGINT      PRIMARY KEY,
+    username    TEXT        NOT NULL,
+    created_at  TIMESTAMP   WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 COMMENT ON TABLE users IS 'Info about users';

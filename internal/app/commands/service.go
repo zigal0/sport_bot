@@ -6,23 +6,20 @@ import (
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/zigal0/sport_bot/internal/repository/users"
 )
 
 type CommandService struct {
 	bot              *tgbotapi.BotAPI
 	commandProcessor CommandProcessor
-
-	usersRepo users.UsersRepo
 }
 
 func NewCommandService(
 	bot *tgbotapi.BotAPI,
-	usersRepo users.UsersRepo,
+	commandProcessor CommandProcessor,
 ) *CommandService {
 	return &CommandService{
-		bot:       bot,
-		usersRepo: usersRepo,
+		bot:              bot,
+		commandProcessor: commandProcessor,
 	}
 }
 
@@ -52,6 +49,12 @@ func (svc *CommandService) handleMessage(inputMessage *tgbotapi.Message) {
 		svc.Help(inputMessage)
 	case "start_track":
 		svc.StartTrack(inputMessage)
+	case "stop_track":
+		svc.StopTrack(inputMessage)
+	case "user_info":
+		svc.UserInfo(inputMessage)
+	case "rename_user":
+		svc.RenameUser(inputMessage)
 	}
 }
 

@@ -9,8 +9,9 @@ import (
 const helpMessage = `Available commands:
 User commands:
 /start_track - starts track user
-/rename - changes username (default = telegram username)
+/rename_user {new_user_name} - changes username (default = telegram username)
 /stop_track - deletes all user data and stops track
+/user_info - shows info about user
 
 Exercise commands:
 /create_exercise - creates new exercise with given name
@@ -29,6 +30,6 @@ func (svc *CommandService) Help(inputMessage *tgbotapi.Message) {
 
 	_, err := svc.bot.Send(msg)
 	if err != nil {
-		log.Printf("CommandService.Help: error sending reply message to chat - %v", err)
+		log.Printf("CommandService.Help: error sending reply message to chat: %v", err)
 	}
 }
